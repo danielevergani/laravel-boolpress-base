@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Comment;
+use App\Http\Controllers\Controller;
+use App\Post;
 
-
-class CommentController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,8 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::all();
+        dd($posts);
     }
 
     /**
@@ -45,9 +46,9 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        dd($post);
     }
 
     /**
