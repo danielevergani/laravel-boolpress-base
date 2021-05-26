@@ -65,7 +65,7 @@ class PostController extends Controller
         $newPost = Post::create($data); 
 
         //"collego" i tag
-        $newPost ->roles()->attach($data['tags']);
+        $newPost ->tags()->attach($data['tags']);
 
         return redirect()->route('admin.posts.index');
 
