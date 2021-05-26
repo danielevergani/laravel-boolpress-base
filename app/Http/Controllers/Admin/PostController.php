@@ -5,9 +5,17 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Tag;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
-{
+{   
+    protected $validation = [
+        'date' => 'required|date',
+        'content' => 'required|string',
+        'image' => 'nullable|url'
+    ];
+    
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +35,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('tags'));
     }
 
     /**
@@ -38,7 +48,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validation = $this->validation;
+        $validation['title'] = 'required|string|max:255|unique:posts';
+
+        $request->validate($this->validation);
+
+        $data = $request->all();
+
+        //verifica checkbox
+        $data['published'] = !isset($data['published']) ? 0 : 1;
+
+        //slug
+        $data['slug'] = Str::slug($data['title'], '-');
+
+        //inserisco dati in db
+        $newPost = Post::create($data); 
+
+        //"collego" i tag
+        $newPost ->roles()->attach($data['tags']);
+
+        return redirect()->route('admin.posts.index');
+
     }
 
     /**
