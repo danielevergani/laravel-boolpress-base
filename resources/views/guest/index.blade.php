@@ -16,7 +16,7 @@
 			{{$post->content}}
 		</p>
 		<div>
-			{{-- <a href="{{route('guest.posts.show', ['slug' => $post->slug])}}">Leggi di più</a> --}}
+			<a href="{{route('guest.posts.show', ['slug' => $post->slug])}}">Leggi di più</a>
 		</div>
 	</div><!-- /.blog-post -->
 	@endforeach
