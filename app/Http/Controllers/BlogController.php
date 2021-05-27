@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 use App\Comment;
 
 class BlogController extends Controller
@@ -11,8 +12,9 @@ class BlogController extends Controller
     public function index()
     {
         $posts = Post::where('published', 1)->orderBy('date', 'asc')->get();
+        $tags = Tag::all();
 
-        return view('guest.index', compact('posts'));
+        return view('guest.index', compact('posts', 'tags'));
     }
 
     public function show($slug)
@@ -37,5 +39,19 @@ class BlogController extends Controller
         $newComment->save();
 
         return back();
+    }
+
+    public function filterTag($slug)
+    {
+        $tags = Tag::all();
+
+        $tag = Tag::where('slug', $slug)->first();
+        if($tag == null){
+            abort(404);
+        }
+
+        $posts = $tag->posts()->where('published', 1)->get();
+
+        return view('guest.index', compact('posts', 'tags'));
     }
 }
