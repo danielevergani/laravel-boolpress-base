@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -13,7 +14,7 @@ class PostController extends Controller
     protected $validation = [
         'date' => 'required|date',
         'content' => 'required|string',
-        'image' => 'nullable|url'
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
     ];
     
     /**
@@ -61,6 +62,11 @@ class PostController extends Controller
 
         //slug
         $data['slug'] = Str::slug($data['title'], '-');
+
+        //passare immagine
+        if(isset($data['image'])){
+            $data['image'] = Storage::disk('public')->put('images', $data['image']);
+        }
 
         //inserisco dati in db
         $newPost = Post::create($data); 
