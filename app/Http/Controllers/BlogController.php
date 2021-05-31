@@ -20,8 +20,9 @@ class BlogController extends Controller
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->first();
+        $tags = Tag::all();
         
-        return view('guest.show', compact('post'));
+        return view('guest.show', compact('post', 'tags'));
     }
 
     public function addComment(Request $request, Post $post)
