@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Tag;
+use App\Mail\CommentNotification;
+use Illuminate\Support\Facades\Mail;
 use App\Comment;
 
 class BlogController extends Controller
@@ -38,6 +40,10 @@ class BlogController extends Controller
         $newComment->post_id = $post->id;
 
         $newComment->save();
+
+        //invio della mail
+        //se avessi un user prendere la sua email con $post->user->email
+        Mail::to('daniele@gmail.com')->send(new CommentNotification($post));
 
         return back();
     }
